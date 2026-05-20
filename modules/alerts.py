@@ -6,8 +6,7 @@ def show_alerts():
     st.header("🚨 Financial Alerts")
 
     df = pd.read_csv(
-        "data/expense_data.csv",
-        nrows=10000
+        "data/sample_expense_data.csv"
     )
 
     total_amount = df["amount"].sum()

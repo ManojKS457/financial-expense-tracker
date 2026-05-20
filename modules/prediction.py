@@ -9,8 +9,7 @@ def show_prediction():
     st.header("🤖 Future Expense Prediction")
 
     df = pd.read_csv(
-        "data/expense_data.csv",
-        nrows=10000
+        "data/sample_expense_data.csv"
     )
 
     df["Index"] = np.arange(len(df))

@@ -10,8 +10,7 @@ def show_dashboard():
     """)
 
     df = pd.read_csv(
-        "data/expense_data.csv",
-        nrows=10000
+        "data/sample_expense_data.csv"
     )
 
     total_amount = df["amount"].sum()
@@ -30,7 +29,6 @@ def show_dashboard():
         (total_amount / monthly_budget) * 100
     )
 
-    # KPI CARDS
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
@@ -55,7 +53,6 @@ def show_dashboard():
 
     st.markdown("---")
 
-    # Budget Analysis
     st.subheader("💵 Monthly Budget Analysis")
 
     col5, col6 = st.columns(2)
@@ -76,7 +73,6 @@ def show_dashboard():
 
     st.markdown("---")
 
-    # AI Insights
     st.subheader("🤖 AI Insights")
 
     if fraud_transactions > 0:

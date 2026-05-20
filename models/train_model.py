@@ -4,8 +4,7 @@ from sklearn.linear_model import LinearRegression
 import joblib
 
 df = pd.read_csv(
-    "data/expense_data.csv",
-    nrows=10000
+    "data/sample_expense_data.csv"
 )
 
 df["Index"] = np.arange(len(df))

@@ -7,8 +7,7 @@ def show_analytics():
     st.title("📈 Financial Analytics")
 
     df = pd.read_csv(
-        "data/expense_data.csv",
-        nrows=10000
+        "data/sample_expense_data.csv"
     )
 
     tab1, tab2, tab3 = st.tabs(
@@ -19,7 +18,6 @@ def show_analytics():
         ]
     )
 
-    # TAB 1
     with tab1:
 
         st.subheader("Transaction Distribution")
@@ -55,7 +53,6 @@ def show_analytics():
             use_container_width=True
         )
 
-    # TAB 2
     with tab2:
 
         st.subheader("Fraud Detection Analysis")
@@ -78,7 +75,6 @@ def show_analytics():
             use_container_width=True
         )
 
-    # TAB 3
     with tab3:
 
         st.subheader("Spending Pattern Trends")

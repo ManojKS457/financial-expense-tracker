@@ -6,8 +6,7 @@ def show_reports():
     st.header("📄 Financial Reports")
 
     df = pd.read_csv(
-        "data/expense_data.csv",
-        nrows=10000
+        "data/sample_expense_data.csv"
     )
 
     st.download_button(

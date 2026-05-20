@@ -1,13 +1,10 @@
 import pandas as pd
 
-DATA_PATH = "data/expense_data.csv"
+DATA_PATH = "data/sample_expense_data.csv"
 
 def load_dataset():
 
-    df = pd.read_csv(
-        DATA_PATH,
-        nrows=10000
-    )
+    df = pd.read_csv(DATA_PATH)
 
     return df
 

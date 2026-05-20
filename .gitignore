@@ -2,8 +2,12 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
 .env
+
 database/*.db
 models/*.pkl
-.ipynb_checkpoints/
+
 data/expense_data.csv
+
+.ipynb_checkpoints/

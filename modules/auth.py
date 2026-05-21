@@ -27,11 +27,11 @@ conn.commit()
 
 # ---------------- GOOGLE OAUTH ---------------- #
 
-CLIENT_ID = st.secrets["GOOGLE_CLIENT_ID"]
+CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
-CLIENT_SECRET = st.secrets["GOOGLE_CLIENT_SECRET"]
+CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
-REDIRECT_URI = st.secrets["REDIRECT_URI"]
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth"
 

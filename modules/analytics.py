@@ -10,31 +10,59 @@ def show_analytics():
 
     df = pd.read_csv("data/sample_expense_data.csv")
 
-    # DATA PREVIEW
-
     st.subheader("Dataset Preview")
 
     st.dataframe(df.head())
 
-    # ---------------- TOTALS ---------------- #
+    # METRICS
 
     total_amount = df["amount"].sum()
-
     fraud_count = df["isFraud"].sum()
-
     avg_amount = df["amount"].mean()
 
     col1, col2, col3 = st.columns(3)
 
-    col1.metric("Total Transactions", f"₹ {total_amount:,.2f}")
+    col1.metric(
+        "Total Transactions",
+        f"₹ {total_amount:,.2f}"
+    )
 
-    col2.metric("Fraud Transactions", int(fraud_count))
+    col2.metric(
+        "Fraud Transactions",
+        int(fraud_count)
+    )
 
-    col3.metric("Average Amount", f"₹ {avg_amount:,.2f}")
+    col3.metric(
+        "Average Amount",
+        f"₹ {avg_amount:,.2f}"
+    )
 
-    # ---------------- BAR CHART ---------------- #
+    # ================= LINE GRAPH =================
 
-    st.subheader("Transaction Type Analysis")
+    st.subheader("📈 Expense Trend Over Steps")
+
+    trend_data = (
+        df.groupby("step")["amount"]
+        .sum()
+        .reset_index()
+    )
+
+    fig_line = px.line(
+        trend_data,
+        x="step",
+        y="amount",
+        markers=True,
+        title="Expense Trend"
+    )
+
+    st.plotly_chart(
+        fig_line,
+        use_container_width=True
+    )
+
+    # ================= BAR GRAPH =================
+
+    st.subheader("📊 Transaction Type Analysis")
 
     type_data = (
         df.groupby("type")["amount"]
@@ -42,7 +70,7 @@ def show_analytics():
         .reset_index()
     )
 
-    fig1 = px.bar(
+    fig_bar = px.bar(
         type_data,
         x="type",
         y="amount",
@@ -51,15 +79,19 @@ def show_analytics():
     )
 
     st.plotly_chart(
-        fig1,
+        fig_bar,
         use_container_width=True
     )
 
-    # ---------------- PIE CHART ---------------- #
+    # ================= PIE CHART =================
 
-    st.subheader("Fraud vs Legitimate Transactions")
+    st.subheader("🥧 Fraud Detection Distribution")
 
-    fraud_data = df["isFraud"].value_counts().reset_index()
+    fraud_data = (
+        df["isFraud"]
+        .value_counts()
+        .reset_index()
+    )
 
     fraud_data.columns = ["Fraud", "Count"]
 
@@ -68,21 +100,21 @@ def show_analytics():
         1: "Fraud"
     })
 
-    fig2 = px.pie(
+    fig_pie = px.pie(
         fraud_data,
         names="Fraud",
         values="Count",
-        title="Fraud Detection Distribution"
+        title="Fraud vs Legitimate Transactions"
     )
 
     st.plotly_chart(
-        fig2,
+        fig_pie,
         use_container_width=True
     )
 
-    # ---------------- TOP TRANSACTIONS ---------------- #
+    # ================= TOP TRANSACTIONS =================
 
-    st.subheader("Top 10 Highest Transactions")
+    st.subheader("💰 Top 10 Highest Transactions")
 
     top_transactions = (
         df.sort_values(
@@ -92,7 +124,7 @@ def show_analytics():
         .head(10)
     )
 
-    fig3 = px.bar(
+    fig_top = px.bar(
         top_transactions,
         x="nameOrig",
         y="amount",
@@ -101,6 +133,6 @@ def show_analytics():
     )
 
     st.plotly_chart(
-        fig3,
+        fig_top,
         use_container_width=True
     )

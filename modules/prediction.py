@@ -25,14 +25,16 @@ def show_prediction():
 
     if st.button("Predict Fraud"):
 
-        # SIMPLE LOGIC
+        # SIMPLE AI LOGIC
 
         if amount > 500000:
             prediction = "Fraudulent Transaction"
             risk = "High Risk"
+
         elif amount > 100000:
             prediction = "Suspicious Transaction"
             risk = "Medium Risk"
+
         else:
             prediction = "Legitimate Transaction"
             risk = "Low Risk"
@@ -48,3 +50,14 @@ def show_prediction():
         st.progress(confidence / 100)
 
         st.write(f"{confidence}% confidence")
+
+        st.subheader("Recommendation")
+
+        if risk == "High Risk":
+            st.error("Block this transaction immediately.")
+
+        elif risk == "Medium Risk":
+            st.warning("Transaction requires manual verification.")
+
+        else:
+            st.success("Transaction appears safe.")

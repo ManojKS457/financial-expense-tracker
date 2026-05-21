@@ -1,45 +1,56 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-from sklearn.linear_model import LinearRegression
-import plotly.express as px
+import joblib
 
 def show_prediction():
 
-    st.header("🤖 Future Expense Prediction")
+    st.title("🤖 Fraud Prediction")
 
-    df = pd.read_csv(
-        "data/sample_expense_data.csv"
+    model = joblib.load(
+        "models/expense_prediction_model.pkl"
     )
 
-    df["Index"] = np.arange(len(df))
-
-    X = df[["Index"]]
-
-    y = df["amount"]
-
-    model = LinearRegression()
-
-    model.fit(X, y)
-
-    future_index = np.array([[len(df) + 1]])
-
-    prediction = model.predict(future_index)
-
-    st.success(
-        f"Predicted Future Transaction Amount: ₹{prediction[0]:,.2f}"
+    amount = st.number_input(
+        "Transaction Amount",
+        min_value=0.0
     )
 
-    df["Predicted"] = model.predict(X)
-
-    fig = px.line(
-        df.head(200),
-        x="Index",
-        y=["amount", "Predicted"],
-        title="Actual vs Predicted Transactions"
+    oldbalanceOrg = st.number_input(
+        "Old Balance Sender",
+        min_value=0.0
     )
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True
+    newbalanceOrig = st.number_input(
+        "New Balance Sender",
+        min_value=0.0
     )
+
+    oldbalanceDest = st.number_input(
+        "Old Balance Receiver",
+        min_value=0.0
+    )
+
+    newbalanceDest = st.number_input(
+        "New Balance Receiver",
+        min_value=0.0
+    )
+
+    if st.button("Predict Fraud"):
+
+        input_data = pd.DataFrame([[
+            amount,
+            oldbalanceOrg,
+            newbalanceOrig,
+            oldbalanceDest,
+            newbalanceDest
+        ]])
+
+        prediction = model.predict(input_data)
+
+        if prediction[0] == 1:
+
+            st.error("⚠ Fraudulent Transaction Detected")
+
+        else:
+
+            st.success("✅ Legitimate Transaction")

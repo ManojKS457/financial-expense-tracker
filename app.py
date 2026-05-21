@@ -1,5 +1,6 @@
 import streamlit as st
 
+from modules.auth import login_signup
 from modules.dashboard import show_dashboard
 from modules.analytics import show_analytics
 from modules.reports import show_reports
@@ -14,44 +15,71 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ---------------- SIDEBAR ---------------- #
+# ---------------- SESSION STATE ---------------- #
 
-st.sidebar.image(
-    "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
-    width=100
-)
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-st.sidebar.title("💰 Finance Dashboard")
+if "user_email" not in st.session_state:
+    st.session_state.user_email = ""
 
-menu = st.sidebar.radio(
-    "Navigation",
-    [
-        "Dashboard",
-        "Add Expense",
-        "Analytics",
-        "Reports",
-        "Predictions"
-    ]
-)
+# ---------------- LOGIN PAGE ---------------- #
 
-# ---------------- PAGE NAVIGATION ---------------- #
+if not st.session_state.logged_in:
 
-if menu == "Dashboard":
+    login_signup()
 
-    show_dashboard()
+# ---------------- MAIN APP ---------------- #
 
-elif menu == "Add Expense":
+else:
 
-    show_add_expense()
+    st.sidebar.image(
+        "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
+        width=100
+    )
 
-elif menu == "Analytics":
+    st.sidebar.title("💰 Finance Dashboard")
 
-    show_analytics()
+    menu = st.sidebar.radio(
+        "Navigation",
+        [
+            "Dashboard",
+            "Add Expense",
+            "Analytics",
+            "Reports",
+            "Predictions"
+        ]
+    )
 
-elif menu == "Reports":
+    st.sidebar.success(
+        f"Logged in as:\n{st.session_state.user_email}"
+    )
 
-    show_reports()
+    if st.sidebar.button("Logout"):
 
-elif menu == "Predictions":
+        st.session_state.logged_in = False
+        st.session_state.user_email = ""
 
-    show_prediction()
+        st.rerun()
+
+    # ---------------- PAGES ---------------- #
+
+    if menu == "Dashboard":
+
+        show_dashboard()
+
+    elif menu == "Add Expense":
+
+        show_add_expense()
+
+    elif menu == "Analytics":
+
+        show_analytics()
+
+    elif menu == "Reports":
+
+        show_reports()
+
+    elif menu == "Predictions":
+
+        show_prediction()

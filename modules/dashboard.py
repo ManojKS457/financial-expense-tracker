@@ -5,105 +5,28 @@ def show_dashboard():
 
     st.title("💰 AI Financial Analytics Dashboard")
 
-    st.markdown("""
-    Real-Time Banking Transaction Intelligence System
-    """)
+    df = pd.read_csv("data/sample_expense_data.csv")
 
-    df = pd.read_csv(
-        "data/sample_expense_data.csv"
-    )
+    total_expense = df["amount"].sum()
 
-    total_amount = df["amount"].sum()
+    avg_expense = df["amount"].mean()
 
-    average_amount = df["amount"].mean()
+    highest_expense = df["amount"].max()
 
-    highest_transaction = df["amount"].max()
-
-    fraud_transactions = df["isFraud"].sum()
-
-    monthly_budget = 5000000
-
-    remaining_budget = monthly_budget - total_amount
-
-    budget_usage = int(
-        (total_amount / monthly_budget) * 100
-    )
+    fraud_count = len(df[df["isFraud"] == 1])
 
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric(
-        "💸 Total Expenses",
-        f"₹{total_amount:,.2f}"
-    )
+    col1.metric("Total Expenses", f"₹{total_expense:,.2f}")
 
-    col2.metric(
-        "📊 Average Transaction",
-        f"₹{average_amount:,.2f}"
-    )
+    col2.metric("Average Expense", f"₹{avg_expense:,.2f}")
 
-    col3.metric(
-        "🔥 Highest Transaction",
-        f"₹{highest_transaction:,.2f}"
-    )
+    col3.metric("Highest Expense", f"₹{highest_expense:,.2f}")
 
-    col4.metric(
-        "🚨 Fraud Transactions",
-        int(fraud_transactions)
-    )
+    col4.metric("Fraud Transactions", fraud_count)
 
-    st.markdown("---")
+    st.divider()
 
-    st.subheader("💵 Monthly Budget Analysis")
+    st.subheader("Recent Transactions")
 
-    col5, col6 = st.columns(2)
-
-    col5.metric(
-        "Monthly Budget",
-        f"₹{monthly_budget:,.2f}"
-    )
-
-    col6.metric(
-        "Remaining Budget",
-        f"₹{remaining_budget:,.2f}"
-    )
-
-    st.progress(min(budget_usage, 100))
-
-    st.write(f"Budget Usage: {budget_usage}%")
-
-    st.markdown("---")
-
-    st.subheader("🤖 AI Insights")
-
-    if fraud_transactions > 0:
-
-        st.warning(
-            "High-risk fraud transactions detected."
-        )
-
-    if average_amount > 50000:
-
-        st.info(
-            "Average transaction amount is unusually high."
-        )
-
-    if total_amount > monthly_budget:
-
-        st.error(
-            "Monthly budget exceeded."
-        )
-
-    else:
-
-        st.success(
-            "Expenses are within monthly budget."
-        )
-
-    st.markdown("---")
-
-    st.subheader("📄 Recent Transactions")
-
-    st.dataframe(
-        df.head(20),
-        use_container_width=True
-    )
+    st.dataframe(df.head(10))

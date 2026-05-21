@@ -1,14 +1,30 @@
 import streamlit as st
-import pandas as pd
-import joblib
+import os
 
 def show_prediction():
 
     st.title("🤖 Fraud Prediction")
 
-    model = joblib.load(
-        "models/expense_prediction_model.pkl"
-    )
+    model_path = "models/expense_prediction_model.pkl"
+
+    # CHECK MODEL EXISTS
+
+    if not os.path.exists(model_path):
+
+        st.warning(
+            "Prediction model not found."
+        )
+
+        st.info(
+            "Upload expense_prediction_model.pkl into models folder."
+        )
+
+        return
+
+    import joblib
+    import pandas as pd
+
+    model = joblib.load(model_path)
 
     amount = st.number_input(
         "Transaction Amount",
@@ -49,7 +65,7 @@ def show_prediction():
 
         if prediction[0] == 1:
 
-            st.error("⚠ Fraudulent Transaction Detected")
+            st.error("⚠ Fraudulent Transaction")
 
         else:
 

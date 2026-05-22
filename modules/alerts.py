@@ -1,44 +1,30 @@
 import streamlit as st
-import pandas as pd
+from utils.email_sender import send_email
+
 
 def show_alerts():
 
-    st.header("🚨 Financial Alerts")
+    st.title("📧 Email Alerts")
 
-    df = pd.read_csv(
-        "data/sample_expense_data.csv"
-    )
+    receiver_email = st.text_input("Enter Email Address")
 
-    total_amount = df["amount"].sum()
+    if st.button("Send Budget Alert"):
 
-    monthly_budget = 5000000
+        subject = "Budget Alert - Finance Tracker"
 
-    fraud_count = df["isFraud"].sum()
+        body = """
+Hello User,
 
-    st.metric(
-        "Total Expenses",
-        f"₹{total_amount:,.2f}"
-    )
+Your monthly budget limit has been exceeded.
 
-    st.metric(
-        "Fraud Transactions",
-        int(fraud_count)
-    )
+Please review your expenses immediately.
 
-    if total_amount > monthly_budget:
+- Finance Expense Tracker
+"""
 
-        st.error(
-            "Monthly budget exceeded!"
-        )
+        success = send_email(subject, body, receiver_email)
 
-    else:
-
-        st.success(
-            "Budget is within limit."
-        )
-
-    if fraud_count > 0:
-
-        st.warning(
-            f"{int(fraud_count)} fraud transactions detected."
-        )
+        if success:
+            st.success("Email Sent Successfully!")
+        else:
+            st.error("Failed to Send Email")

@@ -1,85 +1,59 @@
 import streamlit as st
 
-from modules.auth import login_signup
 from modules.dashboard import show_dashboard
 from modules.analytics import show_analytics
 from modules.reports import show_reports
 from modules.prediction import show_prediction
 from modules.add_expense import show_add_expense
-
-# ---------------- PAGE CONFIG ---------------- #
+from modules.alerts import show_alerts
 
 st.set_page_config(
-    page_title="AI Finance Expense Tracker",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    page_title="Finance Expense Tracker",
+    layout="wide"
 )
 
-# ---------------- SESSION STATE ---------------- #
+# ---------------- SIDEBAR ---------------- #
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
+st.sidebar.image(
+    "https://cdn-icons-png.flaticon.com/512/2830/2830284.png",
+    width=80
+)
 
-if "user_email" not in st.session_state:
-    st.session_state.user_email = ""
+st.sidebar.title("💰 Finance Dashboard")
 
-# ---------------- LOGIN PAGE ---------------- #
+menu = st.sidebar.radio(
+    "Navigation",
+    [
+        "Dashboard",
+        "Add Expense",
+        "Analytics",
+        "Reports",
+        "Predictions",
+        "Alerts"
+    ]
+)
 
-if not st.session_state.logged_in:
+st.sidebar.success("Logged in as: admin@gmail.com")
 
-    login_signup()
+if st.sidebar.button("Logout"):
+    st.warning("Logged out successfully!")
 
-# ---------------- MAIN APP ---------------- #
+# ---------------- PAGES ---------------- #
 
-else:
+if menu == "Dashboard":
+    show_dashboard()
 
-    st.sidebar.image(
-        "https://cdn-icons-png.flaticon.com/512/2489/2489756.png",
-        width=100
-    )
+elif menu == "Add Expense":
+    show_add_expense()
 
-    st.sidebar.title("💰 Finance Dashboard")
+elif menu == "Analytics":
+    show_analytics()
 
-    menu = st.sidebar.radio(
-        "Navigation",
-        [
-            "Dashboard",
-            "Add Expense",
-            "Analytics",
-            "Reports",
-            "Predictions"
-        ]
-    )
+elif menu == "Reports":
+    show_reports()
 
-    st.sidebar.success(
-        f"Logged in as:\n{st.session_state.user_email}"
-    )
+elif menu == "Predictions":
+    show_prediction()
 
-    if st.sidebar.button("Logout"):
-
-        st.session_state.logged_in = False
-        st.session_state.user_email = ""
-
-        st.rerun()
-
-    # ---------------- PAGES ---------------- #
-
-    if menu == "Dashboard":
-
-        show_dashboard()
-
-    elif menu == "Add Expense":
-
-        show_add_expense()
-
-    elif menu == "Analytics":
-
-        show_analytics()
-
-    elif menu == "Reports":
-
-        show_reports()
-
-    elif menu == "Predictions":
-
-        show_prediction()
+elif menu == "Alerts":
+    show_alerts()
